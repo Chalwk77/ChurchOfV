@@ -1,32 +1,28 @@
-// Copyright (c) 2022, Jericho Crosby <jericho.crosby227@gmail.com>
+// Copyright (c) 2023, Jericho Crosby <jericho.crosby227@gmail.com>
 
-package com.jericho.listeners;
+package com.chalwk.listeners;
 
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.UserSnowflake;
-import net.dv8tion.jda.api.entities.channel.ChannelType;
 import net.dv8tion.jda.api.events.guild.GuildReadyEvent;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
-import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.json.JSONObject;
 
-import javax.annotation.Nonnull;
 import java.io.IOException;
 
-import static com.jericho.Main.cprint;
-import static com.jericho.Main.members;
-import static com.jericho.Utilities.FileIO.writeJSONFile;
+import static com.chalwk.Main.members;
+import static com.chalwk.Utilities.FileIO.writeJSONArray;
 
 public class EventListeners extends ListenerAdapter {
 
     @Override
-    public void onGuildReady(@Nonnull GuildReadyEvent event) {
+    public void onGuildReady(GuildReadyEvent event) {
 
         Guild guild = event.getGuild();
 
-        cprint("Guild ready: " + guild.getName());
-        cprint("Bot name: " + event.getJDA().getSelfUser().getName());
+        System.out.println("Guild ready: " + guild.getName());
+        System.out.println("Bot name: " + event.getJDA().getSelfUser().getName());
 
         if (guild.getRolesByName("Pure of Heart", true).isEmpty()) {
             guild.createRole().setName("Pure of Heart").queue();
@@ -34,7 +30,7 @@ public class EventListeners extends ListenerAdapter {
     }
 
     @Override
-    public void onButtonInteraction(@Nonnull ButtonInteractionEvent event) {
+    public void onButtonInteraction(ButtonInteractionEvent event) {
 
         String userID = event.getUser().getId();
         String button = event.getButton().getId();
@@ -56,7 +52,7 @@ public class EventListeners extends ListenerAdapter {
 
             try {
 
-                writeJSONFile(members, "members.json");
+                writeJSONArray(members, "members.json");
                 UserSnowflake userSnowflake = UserSnowflake.fromId(event.getUser().getIdLong());
                 var role = event.getGuild().getRolesByName("Pure of Heart", true).get(0);
                 event.getGuild().addRoleToMember(userSnowflake, role).queue();

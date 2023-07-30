@@ -1,8 +1,8 @@
-// Copyright (c) 2022, Jericho Crosby <jericho.crosby227@gmail.com>
+// Copyright (c) 2023, Jericho Crosby <jericho.crosby227@gmail.com>
 
-package com.jericho.commands;
+package com.chalwk.commands;
 
-import com.jericho.listeners.CommandInterface;
+import com.chalwk.listeners.CommandInterface;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.OptionType;

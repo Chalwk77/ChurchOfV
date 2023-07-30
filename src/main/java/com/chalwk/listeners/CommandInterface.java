@@ -1,10 +1,11 @@
-// Copyright (c) 2022, Jericho Crosby <jericho.crosby227@gmail.com>
+// Copyright (c) 2023, Jericho Crosby <jericho.crosby227@gmail.com>
 
-package com.jericho.listeners;
+package com.chalwk.listeners;
 
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -22,5 +23,5 @@ public interface CommandInterface {
     List<OptionData> getOptions();
 
     // Executes the command:
-    void execute(SlashCommandInteractionEvent event);
+    void execute(SlashCommandInteractionEvent event) throws IOException;
 }

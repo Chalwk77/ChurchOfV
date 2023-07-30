@@ -1,48 +1,38 @@
-// Copyright (c) 2022, Jericho Crosby <jericho.crosby227@gmail.com>
+// Copyright (c) 2023, Jericho Crosby <jericho.crosby227@gmail.com>
 
-package com.jericho;
+package com.chalwk;
 
-import com.jericho.commands.Confession;
-import com.jericho.commands.Join;
-import com.jericho.commands.Leave;
-import com.jericho.commands.Prayer;
-import com.jericho.listeners.CommandManager;
-import com.jericho.listeners.EventListeners;
+import com.chalwk.commands.Confession;
+import com.chalwk.commands.Join;
+import com.chalwk.commands.Leave;
+import com.chalwk.commands.Prayer;
+import com.chalwk.listeners.CommandManager;
+import com.chalwk.listeners.EventListeners;
 import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.sharding.DefaultShardManagerBuilder;
 import net.dv8tion.jda.api.sharding.ShardManager;
 import org.json.JSONArray;
-import org.json.JSONObject;
 
 import javax.security.auth.login.LoginException;
 import java.io.IOException;
 
-import static com.jericho.Utilities.FileIO.*;
+import static com.chalwk.Utilities.Authentication.getToken;
+import static com.chalwk.Utilities.FileIO.*;
 
 public class Main {
 
-    public static JSONObject auth;
     public static JSONArray members;
 
-    // Retrieves the settings from the settings.json file.
     static {
         try {
-            auth = loadJSONObject("auth.token");
-            members = loadJSONArray("members.json");
+            members = getJSONArray("members.json");
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
 
-    private final ShardManager shardManager;
-
-    /**
-     * Loads environment variables and builds the bot shard manager:
-     *
-     * @throws LoginException if the bot token is invalid.
-     */
     public Main() throws LoginException, IOException {
 
         String token = getToken();
@@ -56,7 +46,7 @@ public class Main {
                 GatewayIntent.MESSAGE_CONTENT
         );
 
-        shardManager = builder.build();
+        ShardManager shardManager = builder.build();
         shardManager.addEventListener(new EventListeners());
 
         CommandManager manager = new CommandManager();
@@ -68,43 +58,13 @@ public class Main {
         shardManager.addEventListener(manager);
     }
 
-    /**
-     * Convenience method for printing to console:
-     *
-     * @param str The message to print to console.
-     */
-    public static void cprint(String str) {
-        System.out.println(str);
-    }
-
-    /**
-     * Returns the bot token:
-     */
-    public static String getToken() {
-        return String.valueOf(auth.getString("token"));
-    }
-
-    /**
-     * Main static method:
-     *
-     * @param args The arguments passed to the program.
-     */
     public static void main(String[] args) {
         try {
             new Main();
         } catch (LoginException e) {
-            cprint("ERROR: Provided bot token is invalid");
+            System.out.println("ERROR: Provided bot token is invalid.");
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-    }
-
-    /**
-     * Retrieves the shard manager:
-     *
-     * @return The shardManager instance for the bot.
-     */
-    public ShardManager getShardManager() {
-        return shardManager;
     }
 }

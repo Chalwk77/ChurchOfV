@@ -1,15 +1,17 @@
-// Copyright (c) 2022, Jericho Crosby <jericho.crosby227@gmail.com>
+// Copyright (c) 2023, Jericho Crosby <jericho.crosby227@gmail.com>
 
-package com.jericho.commands;
+package com.chalwk.commands;
 
-import com.jericho.listeners.CommandInterface;
+import com.chalwk.listeners.CommandInterface;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.jericho.Main.members;
+import static com.chalwk.Main.members;
+import static com.chalwk.Utilities.FileIO.writeJSONArray;
 
 public class Leave implements CommandInterface {
 
@@ -29,13 +31,14 @@ public class Leave implements CommandInterface {
     }
 
     @Override
-    public void execute(SlashCommandInteractionEvent e) {
-        var userID = e.getUser().getId();
+    public void execute(SlashCommandInteractionEvent e) throws IOException {
 
+        var userID = e.getUser().getId();
         for (int i = 0; i < members.length(); i++) {
             if (members.getJSONObject(i).getString("id").equals(userID)) {
                 members.remove(i);
                 e.reply("You have left the **Church of V**").setEphemeral(true).queue();
+                writeJSONArray(members, "members.json");
                 return;
             }
         }
